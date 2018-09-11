@@ -1,0 +1,26 @@
+extends layout.pug
+
+block preStyles
+  title #{title || 'hot-update'}
+  if entryCss
+    link(rel="stylesheet" href=entryCss)
+
+block content
+  div#react-root !{reactString}
+
+
+block postScripts
+  if prefetchedData
+    script.
+      window.__DATA__ = !{prefetchedData};
+      
+  script.
+    var scripts = ['#{entryJs}'];
+
+    scripts.forEach(function (src) {
+      var script = document.createElement('script');
+      script.src = src;
+      script.crossOrigin = "anonymous";
+      script.async = false;
+      document.head.appendChild(script);
+    });
