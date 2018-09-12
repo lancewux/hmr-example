@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const path = require('path');
 
 const configBase = require('./webpack.server.base');
-console.log('#### process.env.NODE_ENV', process.env.NODE_ENV);
 
 const entry = configBase.entry;
 for (let hash in entry) {

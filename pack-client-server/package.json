@@ -8,9 +8,9 @@
 
     "local": "concurrently --kill-others \"npm run start-dev-server\" \"npm run build-server:local\" \"npm run start-server:local\" ",
     "start-dev-server": "webpack-dev-server --config config/webpack.client.dev-server.js",
-    "start-server:local": "just-wait -p 'tmpDist/server/index.js' -d 500 && node ./tmpDist/server",
+    "start-server:local": "node node_modules/npm-delay/index.js 6000 && node ./tmpDist/server",
     "build-server:local": "rimraf ./tmpDist/server/* && cross-env NODE_ENV=local webpack --watch --config config/webpack.server.local.js",
-
+    
     "build-server:dev": "rimraf ./tmpDist/server/* && cross-env NODE_ENV=development webpack --config config/webpack.server.dev.js",
     "build-client:dev": "cross-env NODE_ENV=development webpack --config config/webpack.client.dev.js",
     "build:dev": "npm run build-client:dev && npm run build-server:dev",
@@ -38,12 +38,13 @@
     "clean-webpack-plugin": "^0.1.19",
     "concurrently": "^4.0.1",
     "cross-env": "^5.2.0",
+    "css-hot-loader": "^1.4.2",
     "css-loader": "^1.0.0",
     "file-loader": "^2.0.0",
     "ignore-loader": "^0.1.2",
-    "just-wait": "^1.0.11",
     "mini-css-extract-plugin": "^0.4.2",
     "node-sass": "^4.9.3",
+    "npm-delay": "^1.0.4",
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.22.1",
