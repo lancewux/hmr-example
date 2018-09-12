@@ -2,10 +2,10 @@
 const express = require('express');
 const router = express.Router();
 
-const assets = require('../tmpDist/assets.json');
 const { enableLocalServerRender } = require('../config/constant');
 
 router.get('/', function (req, res) {
+  const assets = require('../tmpDist/assets.json');
   const entryJs = assets['home'] && assets['home']['js'] || '';
   const entryCss = assets['home'] && assets['home']['css'] || '';
   const prefetchedData = { framework: 'express' };
@@ -14,7 +14,7 @@ router.get('/', function (req, res) {
     reactString = '';
   } else {
     let basePath = '../tmpDist/';
-    if(process.env.NODE_ENV === 'local') {
+    if (process.env.NODE_ENV === 'local') {
       basePath = '../';
     }
     const Home = require(basePath + 'client/component/Home');

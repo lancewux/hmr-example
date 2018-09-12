@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run local",
-    "local": "npm run build:local && cross-env NODE_ENV=local node server/index.js",
+    "local": "cross-env NODE_ENV=local node server/index.js",
     "build:local": "cross-env NODE_ENV=local webpack --config config/webpack.config.local.js",
     "babel": "cross-env BABEL_ENV=server babel ./client -d ./tmpDist/client --quiet",
     "build:dev": "cross-env NODE_ENV=development webpack --config config/webpack.config.dev.js",
