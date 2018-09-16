@@ -25,7 +25,7 @@ app.use(koaStatic('static'));
 
 if (process.env.NODE_ENV === 'local') {
   const compiler = webpack(config);
-  koaWebpack({ compiler })
+  koaWebpack({ compiler, hotClient: { port: 55756} })
     .then((middleware) => {
       app.use(middleware);
     }, err => {

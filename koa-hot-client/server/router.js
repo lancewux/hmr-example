@@ -1,14 +1,17 @@
 
 const Router = require('koa-router');
 const router = new Router();
+const chalk = require('chalk');
+const getData = require('./api');
 
-const assets = require('../tmpDist/assets.json');
 const { enableLocalServerRender } = require('../config/constant');
 
 router.get('/', async (ctx, next) => {
+  const assets = require('../tmpDist/assets.json');
   const entryJs = assets['home'] && assets['home']['js'] || '';
   const entryCss = assets['home'] && assets['home']['css'] || '';
   const prefetchedData = { framework: 'koa' };
+  console.log(chalk.red('### getData %s'), getData());
   let reactString;
   if (process.env.NODE_ENV === 'local' && !enableLocalServerRender) {
     reactString = '';
