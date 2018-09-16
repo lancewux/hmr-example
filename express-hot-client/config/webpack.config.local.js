@@ -9,7 +9,7 @@ const publicPath = `/dist/`;
 
 const entry = configBase.entry;
 for (let hash in entry) {
-  entry[hash].push('webpack-hot-middleware/client?reload=true');
+  entry[hash].push('webpack-hot-middleware/client?reload=true&timeout=2000'); //设置重连时间
 }
 
 let plugins = configBase.plugins;

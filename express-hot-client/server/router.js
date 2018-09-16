@@ -1,6 +1,8 @@
 
 const express = require('express');
 const router = express.Router();
+const chalk = require('chalk');
+const getData = require('./api');
 
 const { enableLocalServerRender } = require('../config/constant');
 
@@ -9,6 +11,7 @@ router.get('/', function (req, res) {
   const entryJs = assets['home'] && assets['home']['js'] || '';
   const entryCss = assets['home'] && assets['home']['css'] || '';
   const prefetchedData = { framework: 'express' };
+  console.log(chalk.red('### getData %s'), getData());
   let reactString;
   if (process.env.NODE_ENV === 'local' && !enableLocalServerRender) {
     reactString = '';
