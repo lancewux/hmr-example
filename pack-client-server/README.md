@@ -5,7 +5,6 @@
 
 ## 客户端热更新
 
-
 >使用[webpack-dev-server](https://github.com/webpack/webpack-dev-server#readme)来实现客户端代码的热更新。webpack-dev-server的功能主要分两个，一个是代码的热打包，内部用[webpack-dev-middleware](https://github.com/webpack/webpack-dev-middleware)实现。另一个是请求路径的映射和代码的热更新，通过启动一个[express](https://github.com/expressjs/express)服务并用web socket来完成。
 
 webpack-dev-middleware打包后的代码是写入内存的，当代码有变化时，就会重新打包。webpack-dev-server会把页面请求路径映射到内存中代码的路径。
@@ -33,6 +32,8 @@ devServer.hotOnly 要设置成false，不然热更新之后不会reload。
 [just-wait](https://github.com/download/just-wait)在windows上存在兼容性问题，所以直接用[npm-delay](https://github.com/krasevych/npm-delay#readme)。npm-delay生成的bin文件有点问题，所以直接引用node_modules里的相关文件。
 
 服务端打包排除node_modules里的模块时，要把webpack/hot/poll加入白名单。
+
+热加载时的生成文件名不能包含hash。
 
 ## 用法
 
