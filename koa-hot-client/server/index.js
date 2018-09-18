@@ -38,6 +38,7 @@ if (process.env.NODE_ENV === 'local') {
       plugins: ["ignore-html-and-css-imports"],
       cache: false
     });
+    require('./hot-update')({});
   }
 }
 
