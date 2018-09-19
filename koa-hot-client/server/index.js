@@ -25,7 +25,7 @@ app.use(koaStatic('static'));
 
 if (process.env.NODE_ENV === 'local') {
   const compiler = webpack(config);
-  koaWebpack({ compiler, hotClient: { port: 55756} })
+  koaWebpack({ compiler, hotClient: { port: 55756 } })
     .then((middleware) => {
       app.use(middleware);
     }, err => {
@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === 'local') {
       plugins: ["ignore-html-and-css-imports"],
       cache: false
     });
-    require('./hot-update')({});
+    require('./hot-update')({ extenstions: ['.js', '.jsx'] });
   }
 }
 

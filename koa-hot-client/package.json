@@ -4,14 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run local",
-    "local": "npm run build:local && cross-env NODE_ENV=local nodemon server/index.js",
+    "start": "cross-env NODE_ENV=local node server/index.js",
+    "local": "cross-env NODE_ENV=local nodemon server/index.js",
     "build:local": "cross-env NODE_ENV=local webpack --config config/webpack.config.local.js",
-    "babel": "cross-env BABEL_ENV=server babel ./client -d ./tmpDist/client --quiet",
-    "build:dev": "cross-env NODE_ENV=development webpack --config config/webpack.config.dev.js",
-    "start:dev": "cross-env NODE_ENV=development node server/index.js",
-    "dev": "npm run babel && npm run build:dev && npm run start:dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+
+    "babel:dev": "cross-env BABEL_ENV=server babel ./client -d ./tmpDist/client --quiet",
+    "build:dev": "npm run babel:dev && cross-env NODE_ENV=development webpack --config config/webpack.config.dev.js",
+    "start:dev": "cross-env NODE_ENV=development node server/index.js"
   },
   "dependencies": {
     "chalk": "^2.4.1",

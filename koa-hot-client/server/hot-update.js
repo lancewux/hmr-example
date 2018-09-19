@@ -13,22 +13,22 @@ var fileWatchers = {};
 var RENodeModule = /^(?:.*[\\\/])?node_modules(?:[\\\/].*)?$/;
 
 function parseOpts(opts) {
-  var defaultOpts = {
+  var options = {
     extenstions: ['.js'],
     ignoreNodeModules: true,
     matchFn: null
   }
   if (opts && opts.extenstions) {
     if (Array.isArray(opts.extenstions)) {
-      defaultOpts.extenstions = opts.extenstions;
+      options.extenstions = opts.extenstions;
     } else if (typeof opts.extenstions === 'string') {
-      defaultOpts.extenstions = [ opts.extenstions ];
+      options.extenstions = [ opts.extenstions ];
     }
   }
-  if (opts && opts.ignoreNodeModules) defaultOpts.ignoreNodeModules = true;
-  if (opts && typeof opts.matchFn === 'function') defaultOpts.matchFn = opts.matchFn;
+  if (opts && opts.ignoreNodeModules) options.ignoreNodeModules = true;
+  if (opts && typeof opts.matchFn === 'function') options.matchFn = opts.matchFn;
 
-  return parsedOpts;
+  return options;
 }
 
 function match(filename, ext, matchFn, ignoreNodeModules) {
