@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "babel-hot": "cross-env BABEL_ENV=server babel ./server/hot-update.js -o ./server/hot-update1.js ",
     "start": "cross-env NODE_ENV=local node server/index.js",
     "local": "cross-env NODE_ENV=local nodemon server/index.js",
     "build:local": "cross-env NODE_ENV=local webpack --config config/webpack.config.local.js",
-
+    
     "babel:dev": "cross-env BABEL_ENV=server babel ./client -d ./tmpDist/client --quiet",
     "build:dev": "npm run babel:dev && cross-env NODE_ENV=development webpack --config config/webpack.config.dev.js",
     "start:dev": "cross-env NODE_ENV=development node server/index.js"

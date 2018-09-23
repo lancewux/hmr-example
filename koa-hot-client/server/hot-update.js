@@ -10,25 +10,29 @@ var loadedExportFuns = {};
 
 var fileWatchers = {};
 
+var options = {};
+
+var oldExtFuns = {};
+
 var RENodeModule = /^(?:.*[\\\/])?node_modules(?:[\\\/].*)?$/;
 
-function parseOpts(opts) {
-  var options = {
+function setOptions(opts) {
+  var curOpts = {
     extenstions: ['.js'],
     ignoreNodeModules: true,
     matchFn: null
   }
   if (opts && opts.extenstions) {
     if (Array.isArray(opts.extenstions)) {
-      options.extenstions = opts.extenstions;
+      curOpts.extenstions = opts.extenstions;
     } else if (typeof opts.extenstions === 'string') {
-      options.extenstions = [ opts.extenstions ];
+      curOpts.extenstions = [opts.extenstions];
     }
   }
-  if (opts && opts.ignoreNodeModules) options.ignoreNodeModules = true;
-  if (opts && typeof opts.matchFn === 'function') options.matchFn = opts.matchFn;
+  if (opts && opts.ignoreNodeModules) curOpts.ignoreNodeModules = true;
+  if (opts && typeof opts.matchFn === 'function') curOpts.matchFn = opts.matchFn;
 
-  return options;
+  options = curOpts;
 }
 
 function match(filename, ext, matchFn, ignoreNodeModules) {
@@ -42,25 +46,25 @@ function match(filename, ext, matchFn, ignoreNodeModules) {
 }
 
 function watchFile(filename) {
-  console.log('##watchFile', filename);
+  console.log('### watchFile', filename);
   var watcher = fs.watch(filename, { persistent: false }, function () {
     // emitter.emit('change', filename);
-    console.log('#filechange', filename);
+    console.log('### filechange', filename);
 
     var loadedModule = loadedModules[filename];
     var parentModule = loadedModule.parent;
-    console.log('#parentModule.id', parentModule.id)
+    // console.log('#parentModule.id', parentModule.id)
     var children = parentModule.children;
-    console.log('#children.length', children.length);
+    // console.log('#children.length', children.length);
     for (var i = 0; i < children.length; i++) {
-      console.log('children[i].id', children[i].id)
+      // console.log('children[i].id', children[i].id)
       if (children[i].id == filename) {
-        console.log('##i', i);
+        // console.log('##i', i);
         children.splice(i, 1);
         break;
       }
     }
-    console.log('children.length', children.length);
+    // console.log('children.length', children.length);
 
     // console.log('#parentModule.require', parentModule.require);
     // console.log('#parentModule', parentModule);
@@ -86,30 +90,27 @@ function unWatchFiles() {
   }
 }
 
-function hotUpdate(opts) {
-  console.log('replace');
-  var options = parseOpts(opts);
-  var exts = options.extenstions;
+function registerExtension(ext) {
+  var oldExtFun = oldExtFuns[ext] || oldExtFuns['.js'];
   var matchFn = options.matchFn;
   var ignoreNodeModules = options.ignoreNodeModules;
-  for (var i = 0; i < exts.length; i++) {
-    var ext = exts[i];
-    var oldExtFileLoader = require.extensions[ext];
-    require.extensions[ext] = function extFileLoader(module, filename) {
-      oldExtFileLoader(module, filename);
-      if (!match(filename, ext, matchFn, ignoreNodeModules)) return;
+  require.extensions[ext] = function (m, filename) {
+    oldExtFun(m, filename);
+    if (match(filename, ext, matchFn, ignoreNodeModules)) {
+      console.log('### match', filename);
       delete require.cache[filename];
       if (!loadedModules[filename]) {
-        loadedModules[filename] = module;
-        var type = typeof module.exports;
-        console.log('#type', type);
+        console.log('### !loadedModules[filename]', filename);
+        loadedModules[filename] = m;
+        var type = typeof m.exports;
+        console.log('### type', type);
         if (type === 'object') {
-          loadedExportObjs[filename] = module.exports;
+          loadedExportObjs[filename] = m.exports;
         } else if (type === 'function') { //必须包裹一层，不然没办法替换
-          loadedExportFuns[filename] = module.exports;
-          module.exports = function () {
+          loadedExportFuns[filename] = m.exports;
+          m.exports = function () {
             var args = Array.prototype.slice.call(arguments);
-            return loadedExportFuns[filename].apply(module, args);
+            return loadedExportFuns[filename].apply(m, args);
           }
         }
       }
@@ -118,7 +119,71 @@ function hotUpdate(opts) {
       }
     }
   }
+}
+
+function hotUpdate(opts) {
+  console.log('### replace');
+  setOptions(opts);
+  var exts = options.extenstions;
+  exts.forEach(function (ext) {
+    console.log('ext', ext);
+    oldExtFuns[ext] = require.extensions[ext];
+    registerExtension(ext);
+  })
+}
+
+function hotUpdate1(opts) {
+  console.log('### replace');
+
+
+  var options = setOptions(opts);
+  var exts = options.extenstions;
+  var matchFn = options.matchFn;
+  var ignoreNodeModules = options.ignoreNodeModules;
+  for (var i = 0; i < exts.length; i++) {
+    var ext = exts[i];
+    var oldExtFileLoader = require.extensions[ext];
+    require.extensions[ext] = function extFileLoader(module, filename) {
+      oldExtFileLoader(module, filename);
+
+      if (!match(filename, ext, matchFn, ignoreNodeModules)) {
+        oldExtFileLoader(module, filename);
+      } else {
+        console.log('### require.extensions[ext]', filename);
+        oldExtFileLoader(module, filename);
+        // if (!match(filename, ext, matchFn, ignoreNodeModules)) return;
+        console.log('### match', filename);
+
+        delete require.cache[filename];
+        if (!loadedModules[filename]) {
+          console.log('### !loadedModules[filename]', filename);
+          loadedModules[filename] = module;
+          var type = typeof module.exports;
+          console.log('### type', type);
+          if (type === 'object') {
+            loadedExportObjs[filename] = module.exports;
+          } else if (type === 'function') { //必须包裹一层，不然没办法替换
+            loadedExportFuns[filename] = module.exports;
+            module.exports = function () {
+              var args = Array.prototype.slice.call(arguments);
+              return loadedExportFuns[filename].apply(module, args);
+            }
+          }
+        }
+
+
+        if (!fileWatchers[filename]) {
+          watchFile(filename);
+        }
+      }
+
+    }
+
+  }
+  console.log('### replace end');
   return unWatchFiles;
+
+
 }
 
 module.exports = hotUpdate
