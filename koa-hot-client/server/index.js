@@ -36,18 +36,10 @@ if (process.env.NODE_ENV === 'local') {
     require("babel-register")({
       extensions: [".jsx", ".js"],
       plugins: ["ignore-html-and-css-imports"],
-      // ignore: function(filename) {
-      //   if (/\/client\//.test(filename)) {
-      //     return false;
-      //   } else {
-      //     return true;
-      //   }
-      // },
       cache: false
     });
     require('./hot-update')({
       extenstions: ['.js', '.jsx']
-      // matchFn: (filename) => /server/.test(filename)
     });
   }
 }
@@ -57,7 +49,6 @@ app.use(views('.//static/view', {
 }));
 
 const router = require('./router');
-console.log('## after require router');
 app.use(router.routes());
 
 const port = process.env.PORT || 3006;
