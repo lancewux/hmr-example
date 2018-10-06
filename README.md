@@ -1,4 +1,4 @@
-# 使用服务端渲染的多页面应用实现客户端与服务端热更新的几种解决方案。
+# 使用服务端渲染的多页面应用实现客户端与服务端热更新的几种解决方案
 
 多页面应用(MPA, multi-page application)具有更快的首屏加载速度和更好的SEO([search engine optimization](https://en.wikipedia.org/wiki/Search_engine_optimization))，已经超过单页面应用(SPA,[Single-page application](https://en.wikipedia.org/wiki/Single-page_application))，成为更受欢迎的前端技术方案。为了更快的页面呈现速度，通常还会采用服务端渲染技术(SSR, Server Side Rendering)。为了提高开发效率，大家一般会在开发时使用热加载技术。本文接下来要探讨一下，对于使用服务端渲染的多页面应用，有哪些实现客户端与服务端热加载的解决方案。
 
@@ -6,7 +6,7 @@
 
 接下来分服务端代码打包、服务端代码不打包且使用[express](https://github.com/expressjs/express)和服务端代码不打包且使用[koa](https://github.com/koajs/koa)三种场景进行分析。
 
-## 服务端代码打包时的热更新方案。
+## 服务端代码打包时的热更新方案
 
 启用服务端渲染时，由于node不能直接运行客户端代码，最简单的解决方法就是对服务端代码进行打包。
 
