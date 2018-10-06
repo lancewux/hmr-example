@@ -38,6 +38,8 @@ if (process.env.NODE_ENV === 'local' && module.hot) {
 const port = process.env.PORT || 3006;
 const host = process.env.IP || 'localhost';
 
+console.info(chalk.red('sever index.js'));
+
 app.listen(port, host, () => {
   console.info(chalk.red('==> ✅  Server is listening on %s:%d'), host, port);
 });

@@ -1,7 +1,7 @@
 
 # An example of Hot Module Replacement in both client and server side for Multi-page Application with server side rendering
 
-**Both client code and server code are packed by webpack**
+**Server code is based on express and is not packed**
 
 ## Usage
 
@@ -19,5 +19,5 @@ npm run start
 
 ```
 npm run build:dev
-npm run start-server:dev
+npm run start:dev
 ```

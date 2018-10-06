@@ -1,43 +1,21 @@
 'use strict';
 
 const path = require('path');
-const webpack = require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const configBase = require('./webpack.client.base');
-
-const wds = {
-  hostname: 'localhost',
-  port: 8088
-};
-const publicPath = `http://${wds.hostname}:${wds.port}/dist/`;
-
-const entry = configBase.entry;
-for (let key in entry) {
-  entry[key].push(`webpack-dev-server/client?http://${wds.hostname}:${wds.port}`);
-}
+const configBase = require('./webpack.config.base');
+const publicPath = `/dist/`;
 
 let plugins = configBase.plugins;
 plugins = plugins.concat([
   new MiniCssExtractPlugin({
     filename: "[name].css",
     chunkFilename: "[id].css"
-  }),
-  new webpack.HotModuleReplacementPlugin()
+  })
 ]);
 
 const configLocal = {
   mode: 'none',
-  devServer: {
-    publicPath,
-    hot: true,
-    hotOnly: true,
-    quiet: false,
-    noInfo: false,
-    headers: { 'Access-Control-Allow-Origin': '*' },
-    host: wds.hostname,
-    port: wds.port
-  },
   output: {
     path: path.join(__dirname, '../static/dist'),
     filename: '[name].js',

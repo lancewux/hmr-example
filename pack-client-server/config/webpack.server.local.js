@@ -1,13 +1,13 @@
 'use strict';
 
 const webpack = require('webpack');
-const path = require('path');
 
 const configBase = require('./webpack.server.base');
 
 const entry = configBase.entry;
 for (let hash in entry) {
   entry[hash].push('webpack/hot/poll?1000');
+  // entry[hash].push('webpack/hot/signal');
 }
 
 const configLocal = {

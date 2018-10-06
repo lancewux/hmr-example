@@ -4,17 +4,12 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const configBase = require('./webpack.client.base');
-
-const wds = {
-  hostname: 'localhost',
-  port: 8088
-};
-const publicPath = `http://${wds.hostname}:${wds.port}/dist/`;
+const configBase = require('./webpack.config.base');
+const publicPath = `/dist/`;
 
 const entry = configBase.entry;
-for (let key in entry) {
-  entry[key].push(`webpack-dev-server/client?http://${wds.hostname}:${wds.port}`);
+for (let hash in entry) {
+  entry[hash].push('webpack-hot-middleware/client?reload=true&timeout=2000'); //设置重连时间
 }
 
 let plugins = configBase.plugins;
@@ -28,16 +23,6 @@ plugins = plugins.concat([
 
 const configLocal = {
   mode: 'none',
-  devServer: {
-    publicPath,
-    hot: true,
-    hotOnly: true,
-    quiet: false,
-    noInfo: false,
-    headers: { 'Access-Control-Allow-Origin': '*' },
-    host: wds.hostname,
-    port: wds.port
-  },
   output: {
     path: path.join(__dirname, '../static/dist'),
     filename: '[name].js',
@@ -66,9 +51,6 @@ const configLocal = {
           {
             test: [/\.css$/, /\.scss$/],
             use: [
-              {
-                loader: require.resolve('css-hot-loader')
-              },
               {
                 loader: MiniCssExtractPlugin.loader
               },

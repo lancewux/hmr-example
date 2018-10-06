@@ -8,6 +8,7 @@ const outputPath = path.join(__dirname, '../tmpDist/server');
 module.exports = {
   target: 'node',
   context: path.resolve(__dirname, './'),
+  cache: false,
   entry: {
     index: ['../server/index']
   },
@@ -33,7 +34,7 @@ module.exports = {
       }],
   },
   externals: [nodeExternals({
-    whitelist: [/^webpack/] //这里需要把webpack/hot/poll加入白名单
+    whitelist: [/^webpack/] //这里需要把webpack相关的热加载代码加入白名单
   })],
   resolve: {
     extensions: ['.json', '.js', '.jsx']
