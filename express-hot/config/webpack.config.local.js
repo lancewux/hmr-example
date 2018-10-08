@@ -52,6 +52,9 @@ const configLocal = {
             test: [/\.css$/, /\.scss$/],
             use: [
               {
+                loader: require.resolve('css-hot-loader')
+              },
+              {
                 loader: MiniCssExtractPlugin.loader
               },
               {

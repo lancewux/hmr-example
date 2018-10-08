@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Hello from './Hello';
 import './home.scss';
-import { hot } from 'react-hot-loader';
 
 class Home extends Component {
   constructor(props) {
@@ -36,10 +35,6 @@ class Home extends Component {
       </div>
     );
   }
-}
-
-if (module.hot) {
-  Home = hot(module)(Home);
 }
 
 export default Home;
